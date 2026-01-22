@@ -150,58 +150,6 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
         print(f"Decrypted Message: {Decrypted_Message}")
 
 
-        #Encryption - Two large numbers, which are secret, calculate the product of multiplication between the primes
-        #Decryption -
-
-        #We need two key pairs a public and a private
-        #We need to convert messages to ASCII
-        #We need to pad the messages to make sure each ASCII representation is three digits.
-
-        #Example if our keys are (5, 14) and our text is B or Ascii 2
-        #We represent this as 2^5(mod 14) == 4 or Ciphertext D.
-
-        #For decryption the modulus number remains the same 14
-        #The second number will be for example 11 (11, 14) | The private keys are UNIQUE for encryption and decryption.
-
-        # D -> 4 | 4^11(MOD 14) = 4194304(MOD 14) = 2 -> B The original text
-
-        #---------------------------------------------
-
-        #P = 2, P = 7 | Our two prime numbers
-        #N = The product of the two primes | N = 14
-
-        # fi function (Russian f) f(n) = Essentially we just get rid of every common factor of 14 exluding 1. | f(n) counts how many positive numbers up to n are relatively prime to 9 e.g 1, 2, 3 is not because 9 is divisible by 3, 4, 5, 7,8 are all relatively prime. | f(p) = p-1 when p is prime
-        # These are our coprimes with 14 e.g in this case 1, 3, 5, 9, 11, 13 | 6 Numbers total
-        #Coprime or relatively prime means the two numbers will have a GCD of 1.
-
-        #We use a way to compute this number of 6 using this formula f(n) = (p-1)(q-1) e.g (2-1)(7-1) = (1)*(6) = 6
-
-        # e (Encryption private key)  | Has to be between 1 and f(n) | Which in this case is 6.
-        #Has to be coprime with N, f(N) so 14 and 6 so 2, 3, 4, 5 | We cannot use 3, because it is a common factor and 2, 4 are even and cannot be co-prime so we will use 5.
-
-        #D - The decryption key | Has to follow one condition d*e(mod f(n) = 1 | d*5 x (MOD 6) = 1
-        #Multiples of 5, will fit this pattern | 5, 10, 15, 20, 25, 30
-        #5MOD 6 = 5 | 10MOD 6 = 4 ..... When we get to 25MOD 6 we will get 1 | 30 Will be 0 35 will start again from 5 MOD 6 numbers will always be remainder 0-5
-        #D is the index of the Number that will equal to remainder 1 so 25 mod 5 is 1, but its index is index 5 (Non computing index)
-
-        #We need to find the greatest common divisor of f(n) & e
-
-        # Encryption
-        # e = 5 | Private key
-        # n = 14 | Public key
-
-
-        #Decryption
-        # d = 5
-        # n = 14 | Public Key
-
-
-
-
-
-
-
-
 class BubbleWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
