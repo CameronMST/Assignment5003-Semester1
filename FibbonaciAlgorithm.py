@@ -8,3 +8,13 @@ def fib_memo(n, mem={}):
     return mem[n]
 
 print(fib_memo(7))
+#(CodeLucky, 2025)
+
+
+
+
+
+#-------------------------------
+#References
+
+#CodeLucky (2025). Fibonacci Sequence: Classic Dynamic Programming Example with Python - CodeLucky. [online] CodeLucky. Available at: https://codelucky.com/fibonacci-sequence/ [Accessed 23 Jan. 2026].
