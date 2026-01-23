@@ -1,11 +1,19 @@
+equality = input("Enter \'+\' For Ascending or \'-\' For Descending: ")
 my_list = [64, 21, 22, 19, 5, 5]
 
 def selection_sort(my_list):
     for iter in range(0, len(my_list)-1):
         min = iter
         for i in range(iter + 1, len(my_list)):
-            if my_list[i] < my_list[min]:
-                min = i
+            
+            if equality == '-':
+                if my_list[i] > my_list[min]:
+                    min = i
+            #Ascending - Placed at top for default Ascending.
+            else:
+                if my_list[i] < my_list[min]:
+                    min = i
+            #Descending
         my_list[iter], my_list[min] = my_list[min], my_list[iter]
     return my_list
 
