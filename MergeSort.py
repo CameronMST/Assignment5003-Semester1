@@ -1,8 +1,17 @@
+equality = input("Enter \'+\' For Ascending or \'-\' For Descending: ")
+
 def bubblesort(my_list):
     for iter in range(len(my_list)-1):
             for i in range(len(my_list)-iter-1):
-                if my_list[i] > my_list[i+1]:
-                    my_list[i], my_list[i+1] = my_list[i+1], my_list[i]
+
+                if equality == '-':
+                    if my_list[i] < my_list[i+1]:
+                        my_list[i], my_list[i+1] = my_list[i+1], my_list[i]
+                #Descending - Placed at top for default Ascending if any other option is entered
+                else:
+                    if my_list[i] > my_list[i+1]:
+                        my_list[i], my_list[i+1] = my_list[i+1], my_list[i]
+                #Ascending
     return my_list
                 
 print(bubblesort([34, 25, 26, 33]))

@@ -9,7 +9,7 @@ def selection_sort(my_list):
             if equality == '-':
                 if my_list[i] > my_list[min]:
                     min = i
-            #Ascending - Placed at top for default Ascending.
+            #Descending - Placed at top for default Ascending, if anyother option is entered.
             else:
                 if my_list[i] < my_list[min]:
                     min = i
