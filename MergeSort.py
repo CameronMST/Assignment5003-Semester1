@@ -1,0 +1,40 @@
+def Merge_Sort(my_list):
+    if len(my_list) > 1:
+        mid = len(my_list) // 2
+    
+        
+        left_half = my_list[:mid]
+        right_half = my_list[mid:]
+
+        Merge_Sort(left_half)
+        Merge_Sort(right_half)
+
+        left_index, right_index, main_index = 0, 0, 0
+
+        while left_index < len(left_half) and right_index < len(right_half):
+            if left_half[left_index] < right_half[right_index]:
+                my_list[main_index] = left_half[left_index]
+                left_index += 1
+            else:
+                my_list[main_index] = right_half[right_index]
+                right_index += 1
+            main_index += 1
+
+        while left_index < len(left_half):
+            my_list[main_index] = left_half[left_index]
+            left_index += 1
+            main_index += 1
+
+        while right_index < len(right_half):
+            my_list[main_index] = right_half[right_index]
+            right_index += 1
+            main_index += 1
+
+    return my_list
+
+my_list = [5, 2, 6, 9, 1, 4, 2]
+print(Merge_Sort(my_list))
+
+#References
+
+#Tutorialspoint.com. (2019). Data Structures - Merge Sort Algorithm - Tutorialspoint. [online] Available at: https://www.tutorialspoint.com/data_structures_algorithms/merge_sort_algorithm.htm.
