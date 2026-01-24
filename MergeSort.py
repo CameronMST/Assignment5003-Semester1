@@ -26,7 +26,7 @@ def Merge_Sort(my_list):
                     my_list[main_index] = right_half[right_index]
                     right_index += 1
                     main_index += 1
-            #Ascending Order
+            #Ascending Order, Placed Below for Defaulting.
             else:
                 if left_half[left_index] < right_half[right_index]:
                     my_list[main_index] = left_half[left_index]
