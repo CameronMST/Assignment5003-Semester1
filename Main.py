@@ -158,6 +158,37 @@ class BubbleWindow(Toplevel, BaseWindow):
         super().__init__(master)
         self.WindowParameters(self)
 
+        self.Selection = Entry(self, width = 35)
+        self.Selection.place(x=50, y=50)
+        self.LabelSe = Label(self, text="Enter numbers seperated by whitespace:", fg='white', bg='#1F1F1F')
+        self.LabelSe.place(x=50, y=30)
+
+        AscSortButton = Button(self, text="Sort Ascending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.RunBubbleSort('+'))
+        AscSortButton.place(x=150, y=80)
+
+        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.RunBubbleSort('-'))
+        DesSortButton.place(x=50, y=80)
+
+    def RunBubbleSort(self, equality):
+        list_input = self.Selection.get()
+        my_list = list(map(int, list_input.split()))
+
+        def bubblesort(my_list):
+            for iter in range(len(my_list)-1):
+                    for i in range(len(my_list)-iter-1):
+
+                        if equality == '-':
+                            if my_list[i] < my_list[i+1]:
+                                my_list[i], my_list[i+1] = my_list[i+1], my_list[i]
+                        #Descending - Placed at top for default Ascending if any other option is entered
+                        else:
+                            if my_list[i] > my_list[i+1]:
+                                my_list[i], my_list[i+1] = my_list[i+1], my_list[i]
+                        #Ascending
+            return my_list
+                    
+        print(bubblesort(my_list))
+
 class SelectionWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
@@ -226,6 +257,73 @@ class MergeSortWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
         self.WindowParameters(self)
+
+        self.Selection = Entry(self, width = 35)
+        self.Selection.place(x=50, y=50)
+        self.LabelSe = Label(self, text="Enter numbers seperated by whitespace:", fg='white', bg='#1F1F1F')
+        self.LabelSe.place(x=50, y=30)
+
+        AscSortButton = Button(self, text="Sort Ascending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Merge_Sort('+'))
+        AscSortButton.place(x=150, y=80)
+
+        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Merge_Sort('-'))
+        DesSortButton.place(x=50, y=80)
+
+    def Run_Merge_Sort(self, equality):
+        list_input = self.Selection.get()
+        my_list = list(map(int, list_input.split()))
+
+        def Merge_Sort(my_list):
+            if len(my_list) > 1:
+                mid = len(my_list) // 2
+            
+                
+                left_half = my_list[:mid]
+                right_half = my_list[mid:]
+
+                Merge_Sort(left_half)
+                Merge_Sort(right_half)
+
+                left_index, right_index, main_index = 0, 0, 0
+
+                while left_index < len(left_half) and right_index < len(right_half):
+                    
+                    #Descending Order
+                    if equality == '-':
+                        if left_half[left_index] > right_half[right_index]:
+                            my_list[main_index] = left_half[left_index]
+                            left_index += 1
+                            main_index += 1
+                    
+                        else:
+                            my_list[main_index] = right_half[right_index]
+                            right_index += 1
+                            main_index += 1
+                    #Ascending Order, Placed Below for Defaulting.
+                    else:
+                        if left_half[left_index] < right_half[right_index]:
+                            my_list[main_index] = left_half[left_index]
+                            left_index += 1
+                            main_index += 1
+
+                        else:
+                            my_list[main_index] = right_half[right_index]
+                            right_index += 1
+                            main_index += 1    
+
+                while left_index < len(left_half):
+                    my_list[main_index] = left_half[left_index]
+                    left_index += 1
+                    main_index += 1
+
+                while right_index < len(right_half):
+                    my_list[main_index] = right_half[right_index]
+                    right_index += 1
+                    main_index += 1 #(Tutorialspoint, 2019)
+
+            return my_list
+
+        print(Merge_Sort(my_list))        
 
 class RandomisedWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
