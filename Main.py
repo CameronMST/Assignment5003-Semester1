@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 from tkinter import ttk
 import ctypes
@@ -528,10 +529,141 @@ class BehaviouralWindow(Toplevel, BaseWindow):
         super().__init__(master)
         self.WindowParameters(self)
 
+        BehaviouralButton = Button(self, text="Run Iterator Pattern", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_iterator_pattern)
+        BehaviouralButton.place(x=50, y=80)
+
+    def run_iterator_pattern(self):
+
+        class Song:
+            def __init__(self, title):
+                self.title = title
+                self.next_song = 0
+
+        class Playlist:
+            def __init__(self, first_song):
+                self.first_song = first_song
+                self.current_song = None
+            
+            def __iter__(self):
+                self.current_song = self.first_song
+                return self
+
+            def __next__(self):
+                if self.current_song:
+                    title_to_return = self.current_song.title
+                    self.current_song = self.current_song.next_song
+                    return title_to_return
+                else:
+                    raise StopIteration
+            
+        song1 = Song("Bohemian Rhapsody")
+        song2 = Song("Stairway to Heaven")
+        song3 = Song("Hotel California")            
+                    
+        song1.next_song = song2
+        song2.next_song = song3
+
+        my_playlist = Playlist(song1)
+
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+        self.outputLabel.place(x=50, y=120)
+
+        for song_title in my_playlist: #(NeetCode, 2023)
+            self.outputLabel.config(text=f"Now playing: {song_title}", fg='white', bg='#1F1F1F')
+            time.sleep(1)
+            self.update()
+        time.sleep(2)
+        self.outputLabel.config(text="Playlist ended.") 
+
+
+
+    
+
+
+
+
+
 class StructuralWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
         self.WindowParameters(self)
+
+        DropboxLabel = Label(self, text="Select a Song", fg='white', bg='#1F1F1F')
+        DropboxLabel.place(x=50, y=30)
+
+        self.OutputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+        self.OutputLabel.place(x=50, y=120)
+
+        selected_song = StringVar() 
+        dropdown = ttk.Combobox(
+            self, 
+            textvariable=selected_song,
+            values=["Bohemian Rhapsody", "Stairway to Heaven", "Hotel California"],
+            state="readonly"
+        )
+
+        dropdown.place(x=50, y=50)
+        dropdown.current(0)
+
+        StructuralButton = Button(self, text="Play Song",fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.run_adapter_pattern(selected_song))
+        StructuralButton.place(x=50, y=80)
+
+
+    def run_adapter_pattern(self, selected_song):
+        #This is harder to demonstrate than my other patterns.
+
+        #Old System
+        class SimpleMusicPlayer:
+            def __init__(self, output_label):
+                self.output_label = output_label
+
+            def playSongByTitle(self, songTitle):
+                self.output_label.config(text=f"Playing song: {songTitle}")
+
+        #New System
+        class AdvancedMusicPlayer:
+            def __init__(self, output_label):
+                self.output_label = output_label
+
+            def playSongById(self, song_id):
+                self.output_label.config(text=f"Playing song with ID: {song_id}")
+
+        #Adapter
+        class TitleToIdAdapter(SimpleMusicPlayer):
+            def __init__(self, advancedPlayer, output_label):
+                super().__init__(output_label)
+                self.advancedPlayer = advancedPlayer
+                self.master = master
+
+                self.songLibrary = {
+                    "Bohemian Rhapsody": 12455122,
+                    "Stairway to Heaven": 99887766,
+                    "Hotel California": 55443322
+                }
+
+            def playSongByTitle(self, songTitle):
+                self.output_label.config(text=f"Adapter: Translating '{songTitle}' to ID...")
+                self.master.update()
+                time.sleep(1)
+
+                song_id = self.songLibrary.get(songTitle)
+
+                if song_id:
+                    self.advancedPlayer.playSongById(song_id)
+                else:
+                    self.output_label.config(text=f"Error: '{songTitle}' not found in library.") #(NeetCode, 2023)
+
+        master = self
+        advanced_player = AdvancedMusicPlayer(self.OutputLabel)
+        adapter = TitleToIdAdapter(advanced_player, self.OutputLabel)
+        adapter.playSongByTitle(selected_song.get())
+
+
+
+
+
+
+
 
 class CreationalWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
@@ -539,9 +671,116 @@ class CreationalWindow(Toplevel, BaseWindow):
         self.WindowParameters(self)
 
 
-#Algorithms
+        self.LabelCPU = Label(self, text="Enter CPU Model", fg='white', bg='#1F1F1F')
+        self.LabelGPU = Label(self, text="Enter GPU Model", fg='white', bg='#1F1F1F')
+        self.LabelMotherboard = Label(self, text="Enter Motherboard Model", fg='white', bg='#1F1F1F')
+        self.LabelPSU = Label(self, text="Enter PSU Model", fg='white', bg='#1F1F1F')
+        self.LabelStorage = Label(self, text="Enter Storage", fg='white', bg='#1F1F1F')
+        self.LabelMemory = Label(self, text="Enter Memory", fg='white', bg='#1F1F1F')
 
+        self.EntryCPU = Entry(self, width = 21)
+        self.EntryGPU = Entry(self, width = 21)
+        self.EntryMotherboard = Entry(self, width = 21)
+        self.EntryPSU = Entry(self, width = 21)
+        self.EntryStorage = Entry(self, width = 21)
+        self.EntryMemory = Entry(self, width = 21)
+        self.EntryCPU.place(x=50, y=50)
+        self.EntryGPU.place(x=50, y=100)
+        self.EntryMotherboard.place(x=50, y=150)
+        self.EntryPSU.place(x=50, y=200)
+        self.EntryStorage.place(x=50, y=250)
+        self.EntryMemory.place(x=50, y=300)
 
-#Produces Window
+        self.LabelCPU.place(x=50, y=30)
+        self.LabelGPU.place(x=50, y=80)
+        self.LabelMotherboard.place(x=50, y=130)
+        self.LabelPSU.place(x=50, y=180)
+        self.LabelStorage.place(x=50, y=230)
+        self.LabelMemory.place(x=50, y=280)
+
+        BuilderButton = Button(self, text="Build Computer", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_builder_pattern)
+        BuilderButton.place(x=50, y=350)
+
+    def run_builder_pattern(self):
+        CPUInput = self.EntryCPU.get()
+        GPUInput = self.EntryGPU.get()
+        MotherboardInput = self.EntryMotherboard.get()
+        PSUInput = self.EntryPSU.get()
+        StorageInput = self.EntryStorage.get()
+        MemoryInput = self.EntryMemory.get()
+
+        TextBox = Text(self, fg='black', bg='white', width=40, height=15)
+        TextBox.place(x=200, y=50)
+        TextBox.delete("1.0", "end")
+
+        class Computer:
+            def __init__(self):
+                self.CPU = None
+                self.GPU = None
+                self.Motherboard = None
+                self.PSU = None
+                self.Storage = None
+                self.Memory = None
+
+            def setCPU(self, CPUStyle):
+                self.CPU = CPUStyle
+
+            def setGPU(self, GPUStyle):
+                self.GPU = GPUStyle
+
+            def setMotherboard(self, MotherboardStyle):
+                self.Motherboard = MotherboardStyle
+
+            def setPSU(self, PSUStyle):
+                self.PSU = PSUStyle
+
+            def setStorage(self, StorageStyle):
+                self.Storage = StorageStyle
+
+            def setMemory(self, MemoryStyle):
+                self.Memory = MemoryStyle
+
+        class ComputerBuilder:
+            def __init__(self):
+                self.computer = Computer()
+
+            def setCPU(self, CPUStyle):
+                self.computer.setCPU(CPUStyle)
+                return self
+
+            def setGPU(self, GPUStyle):
+                self.computer.setGPU(GPUStyle)
+                return self
+
+            def setMotherboard(self, MotherboardStyle):
+                self.computer.setMotherboard(MotherboardStyle)
+                return self
+            
+            def setPSU(self, PSUStyle):
+                self.computer.setPSU(PSUStyle)
+                return self
+
+            def setStorage(self, StorageStyle):
+                self.computer.setStorage(StorageStyle)
+                return self    
+
+            def setMemory(self, MemoryStyle):
+                self.computer.setMemory(MemoryStyle)
+                return self
+            
+            def build(self):
+                return self.computer
+            
+        computer = ComputerBuilder() \
+                    .setCPU(CPUInput) \
+                    .setGPU(GPUInput) \
+                    .setMotherboard(MotherboardInput) \
+                    .setPSU(PSUInput) \
+                    .setStorage(StorageInput) \
+                    .setMemory(MemoryInput) \
+                    .build() #(NeetCode, 2023)
+        TextBox.insert("1.0", f"\nComputer Specifications:\n{computer.CPU}\n{computer.GPU}\n{computer.Motherboard}\n{computer.PSU}\n{computer.Storage}\n{computer.Memory}\n")
+        TextBox.configure(state=DISABLED)
+
 app = MainWindow()
 app.mainloop()
