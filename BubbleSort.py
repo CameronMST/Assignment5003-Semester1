@@ -1,3 +1,6 @@
+list_input = input("Enter numbers seperated by spaces: ")
+my_list = list(map(int, list_input.split()))
+
 equality = input("Enter \'+\' For Ascending or \'-\' For Descending: ")
 
 def bubblesort(my_list):
@@ -14,7 +17,7 @@ def bubblesort(my_list):
                 #Ascending
     return my_list
                 
-print(bubblesort([34, 25, 26, 33]))
+print(bubblesort(my_list))
 #(GeeksforGeeks, 2014)
 
 

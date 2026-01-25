@@ -1,5 +1,7 @@
+list_input = input("Enter numbers seperated by spaces: ")
+my_list = list(map(int, list_input.split()))
+
 equality = input("Enter \'+\' For Ascending or \'-\' For Descending: ")
-my_list = [64, 21, 22, 19, 5, 5]
 
 def selection_sort(my_list):
     for iter in range(0, len(my_list)-1):

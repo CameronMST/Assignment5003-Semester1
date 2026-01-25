@@ -1,3 +1,6 @@
+list_input = input("Enter numbers seperated by spaces: ")
+my_list = list(map(int, list_input.split()))
+
 equality = input("Enter \'+\' For Ascending or \'-\' For Descending: ")
 
 def Merge_Sort(my_list):
@@ -50,7 +53,6 @@ def Merge_Sort(my_list):
 
     return my_list
 
-my_list = [5, 2, 6, 9, 1, 4, 2]
 print(Merge_Sort(my_list))
 
 #References
