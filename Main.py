@@ -29,7 +29,7 @@ class MainWindow(Tk, BaseWindow):
         # Drop Down Menu
         self.clicked = StringVar()
         self.clicked.set("Select Option")
-        drop = OptionMenu(self, self.clicked, "RSA", "Bubble Sort", "Selection Sort", "Nth Fibonacci Solver", "Merge sort - Divide and Conquer", "Randomised Algorithm", "Recursion", "Search Algorithm", "Behavioural Pattern", "Creational Pattern", "Structural Pattern")  # Source - https://www.geeksforgeeks.org/python/tkinter-optionmenu-widget/
+        drop = OptionMenu(self, self.clicked, "RSA", "Bubble Sort", "Selection Sort", "Nth Fibonacci Solver", "Merge sort - Divide and Conquer", "Randomised Algorithm", "Recursion", "Search Algorithm", "Palindrome" ,"Behavioural Pattern", "Creational Pattern", "Structural Pattern")  # Source - https://www.geeksforgeeks.org/python/tkinter-optionmenu-widget/
         drop.config(font='Arial', fg='white', bg='purple', activebackground='purple', activeforeground='white', bd=1, highlightthickness=0)
         drop.place(anchor=N, rely=0.7, relx=0.5)
 
@@ -64,6 +64,8 @@ class MainWindow(Tk, BaseWindow):
                  CreationalWindow(self)
             case "Structural Pattern":
                 StructuralWindow(self)
+            case "Palindrome":
+                PalindromeWindow(self)
 
     #Algorithm Window Initalisation
 class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DISTINCT PRIMES.
@@ -72,18 +74,28 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
         self.WindowParameters(self)
         self.EntryP = Entry(self, width = 21)
         self.EntryQ = Entry(self, width = 21)
+        self.EntryString = Entry(self, width = 21)
         self.LabelP = Label(self, text="Enter prime number p:", fg='white', bg='#1F1F1F')
         self.LabelQ = Label(self, text="Enter prime number q:", fg='white', bg='#1F1F1F')
+        self.EnteredString = Label(self, text="Enter a string to Encrypt / Decrypt:", fg='white', bg='#1F1F1F')
+        
+        self.LabelEncryptDecrypt = Text(self, fg='black', bg='white', width=40, height=5)
+        self.LabelEncryptDecrypt.place(x=50, y=230)
 
         self.LabelP.place(x=50, y=30)
         self.LabelQ.place(x=50, y=80)
         self.EntryP.place(x=50, y=50)
         self.EntryQ.place(x=50, y=100)
-    
-        RSAButton = Button(self, text="Generate Keys & Encrypt/Decrypt", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.RSAAlgorithm)
-        RSAButton.place(x=50, y=150)
+        self.EntryString.place(x=50, y=150)
+        self.EnteredString.place(x=50, y=130)
 
-    def RSAAlgorithm(self):
+        Encrypt = Button(self, text="Encrypt", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda:self.RSAAlgorithm(True))
+        Encrypt.place(x=50, y=200)
+
+        Decrypt = Button(self, text="Decrypt", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda:self.RSAAlgorithm(False))
+        Decrypt.place(x=150, y=200)
+
+    def RSAAlgorithm(self, EncryptDecrypt):
         def power(base, exponent, m):
             result = 1
             base = base % m
@@ -126,10 +138,11 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
         def encrypt(pk, plaintext):
             key, n = pk
             cipher = [power(ord(char), key, n) for char in plaintext]
-            return cipher
+            return " ".join(map(str, cipher))
 
         def decrypt(pk, ciphertext):
             key, n = pk
+            ciphertext = list(map(int, ciphertext.split()))
             plain = [chr(power(char, key, n)) for char in ciphertext]
             return ''.join(plain)
         
@@ -145,13 +158,17 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
 
         public, private = generateKeys(Input1, Input2)
 
-        Message = 'HI'
-        Encrypted_Message = encrypt(public, Message)
-        Decrypted_Message = decrypt(private, Encrypted_Message)
+        Message = self.EntryString.get()
 
-        print(f"Original Message: {Message}")
-        print(f"Encrypted Message: {Encrypted_Message}")
-        print(f"Decrypted Message: {Decrypted_Message}")
+        if EncryptDecrypt == True:
+            Encrypted_Message = encrypt(public, Message)
+            self.LabelEncryptDecrypt.delete("1.0", "end")
+            self.LabelEncryptDecrypt.insert("1.0", Encrypted_Message)
+
+        else:
+            Decrypted_Message = decrypt(private, Message)
+            self.LabelEncryptDecrypt.delete("1.0", "end")
+            self.LabelEncryptDecrypt.insert("1.0", Decrypted_Message)
 
 class BubbleWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
@@ -330,15 +347,181 @@ class RandomisedWindow(Toplevel, BaseWindow):
         super().__init__(master)
         self.WindowParameters(self)
 
+        ShuffleDeck = Button(self, text="Shuffle Deck", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.Shuffle_Deck)
+        ShuffleDeck.place(x=50, y=80)
+        
+        self.TextRa = Text(self, fg='black', bg='white')
+        self.TextRa.place(x=50, y=120, width= 300, height = 400)
+
+
+    def Shuffle_Deck(self):
+        import random #Importing Random, because you cannot "Randomise" without it, it would be shuffled but not randomised otherwise
+        Type = ['Heart', 'Diamond', 'Club', 'Spade']
+        Ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+
+        deck = [(Type, Rank) for Type in Type 
+                for Rank in Ranks] #(Portfolio Courses, 2023)
+
+        seed = random.randint(1, 1000)
+        random.seed(seed)
+
+        for i in range(len(deck)):
+            j = random.randint(0, len(deck) - 1)
+            deck[i], deck[j] = deck[j], deck[i]
+
+        self.TextRa.config(state=NORMAL)
+        self.TextRa.delete(1.0, END)
+        self.TextRa.insert(END, f"The shuffled deck is Deck is:\n\n")
+        for Type, Rank in deck:
+            self.TextRa.insert(END, f"{Rank} of {Type}\n")
+        self.TextRa.config(state=DISABLED)
+
 class RecursionWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
         self.WindowParameters(self)
 
+        self.RecursionText = Entry(self, width = 35)
+        self.RecursionText.place(x=50, y=50)
+        self.RecursionLabel = Label(self, text="Enter an integer:", fg='white', bg='#1F1F1F')
+        self.RecursionLabel.place(x=50, y=30)
+        self.LabelResult = Label(self, text="", fg='white', bg='#1F1F1F')
+        self.LabelResult.place(x=50, y=180)
+        
+        FactorialButton = Button(self, text="Generate Factorial", command=self.run_factorial)
+        FactorialButton.place(x=50, y=150)
+
+    def run_factorial(self):
+        number = int(self.RecursionText.get())
+        def factorial(number):
+            return 1 if number <= 1 else number * factorial(number-1)
+        self.LabelResult.config(text=f"The factorial of {number} is {factorial(number)}")
+        
+
+
+
+
 class SearchWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
         self.WindowParameters(self)
+
+        self.Search = Entry(self, width = 35)
+        self.Search.place(x=50, y=50)
+        self.SearchLabel = Label(self, text="Enter numbers seperated by whitespace:", fg='white', bg='#1F1F1F')
+        self.SearchLabel.place(x=50, y=30)
+
+        SearchButton = Button(self, text="Press for Statistics", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_search)
+        SearchButton.place(x=150, y=80)
+
+    def run_search(self):
+        list_input = self.Search.get()
+        my_list = list(map(int, list_input.split()))
+
+        TextBox = Text(self, fg='black', bg='white', width=40, height=10)
+        TextBox.place(x=50, y=120)
+        TextBox.delete("1.0", "end")
+
+        def selection_sort(my_list):
+            for iter in range(0, len(my_list)-1):
+                min = iter
+                for i in range(iter + 1, len(my_list)):
+                    if my_list[i] < my_list[min]:
+                        min = i
+                my_list[iter], my_list[min] = my_list[min], my_list[iter]
+            return my_list
+        
+        sorted_list = selection_sort(my_list)
+
+        def Statistical_Search(sorted_list):
+            
+            #Smallest & Largest
+            smallest = sorted_list[0]
+            largest = sorted_list[-1]
+            #Median
+            if len(sorted_list) % 2 == 1:
+                median = sorted_list[len(sorted_list)//2]
+            else:
+                median = (sorted_list[len(sorted_list)//2 - 1] + sorted_list[len(sorted_list)//2]) / 2.
+            
+            #Inter Quartile
+            n = len(sorted_list)
+            LowerIQF = sorted_list[n // 4]
+            UpperIQF = sorted_list[(3 * n) // 4]
+
+            #Mode
+            max_count = 0
+            modes = []
+            for item in sorted_list:
+                count = sorted_list.count(item)
+                if count > max_count:
+                    max_count = count
+                    modes = [item]
+                elif count == max_count and item not in modes:
+                    modes.append(item) #(GeeksforGeeks, 2018)
+
+            TextBox.insert("1.0", f"Smallest Number: {smallest}\n")
+            TextBox.insert("2.0", f"Largest Number: {largest}\n")
+            TextBox.insert("3.0", f"Median: {median}\n")
+            TextBox.insert("4.0", f"Lower Inter Quartile Factor: {LowerIQF}\n")
+            TextBox.insert("5.0", f"Upper Inter Quartile Factor: {UpperIQF}\n")
+            TextBox.insert("6.0", f"Mode(s): {modes[:]}\n")
+            TextBox.configure(state=DISABLED)
+
+        Statistical_Search(sorted_list)
+
+        
+
+
+class PalindromeWindow(Toplevel, BaseWindow):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.WindowParameters(self)
+
+        self.Palindrome = Entry(self, width = 35)
+        self.Palindrome.place(x=50, y=50)
+        self.PalindromeLabel = Label(self, text="Enter a string:", fg='white', bg='#1F1F1F')
+        self.PalindromeLabel.place(x=50, y=30)
+
+        PalindromeButton = Button(self, text="Press for Palindrome Count", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_palindrome)
+        PalindromeButton.place(x=150, y=80)
+
+        self.LabelResult = Label(self, text="", fg='white', bg='#1F1F1F')
+        self.LabelResult.place(x=50, y=150)
+
+    def run_palindrome(self):
+        InputString = self.Palindrome.get()
+        
+        def countPS(InputString):
+            string_length = len(InputString)
+            
+            memo = [[-1 for i in range(string_length)] for i in range(string_length)]
+
+            count = 0
+            for i in range(string_length):
+                for j in range(i + 1, string_length):
+                    
+                    if isPalindrome(i, j, InputString, memo) == True:
+                        count += 1
+            return count
+        def isPalindrome(left_index, right_index, InputString, memo):                            
+            if left_index == right_index:
+                return True
+            
+            if right_index == left_index + 1 and InputString[left_index] == InputString[right_index]:
+                return True
+            
+            if memo[left_index][right_index] != -1:
+                return memo[left_index][right_index]
+            
+            if InputString[left_index] == InputString[right_index] and isPalindrome(left_index + 1, right_index - 1, InputString, memo) == True:
+                memo[left_index][right_index] = True
+            else:
+                memo[left_index][right_index] = False
+            
+            return memo[left_index][right_index]
+        
+        self.LabelResult.config(text=f"Total palindromic substrings are: {countPS(InputString)}")
 
 class BehaviouralWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
