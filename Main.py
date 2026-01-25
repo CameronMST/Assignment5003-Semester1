@@ -95,6 +95,8 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
 
         Decrypt = Button(self, text="Decrypt", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda:self.RSAAlgorithm(False))
         Decrypt.place(x=150, y=200)
+        self.LabelEncryptDecrypt.configure(state=DISABLED)
+
 
     def RSAAlgorithm(self, EncryptDecrypt):
         def power(base, exponent, m):
@@ -163,13 +165,17 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
 
         if EncryptDecrypt == True:
             Encrypted_Message = encrypt(public, Message)
+            self.LabelEncryptDecrypt.configure(state=NORMAL)
             self.LabelEncryptDecrypt.delete("1.0", "end")
             self.LabelEncryptDecrypt.insert("1.0", Encrypted_Message)
+            self.LabelEncryptDecrypt.configure(state=DISABLED)
 
         else:
+            self.LabelEncryptDecrypt.configure(state=NORMAL)
             Decrypted_Message = decrypt(private, Message)
             self.LabelEncryptDecrypt.delete("1.0", "end")
             self.LabelEncryptDecrypt.insert("1.0", Decrypted_Message)
+            self.LabelEncryptDecrypt.configure(state=DISABLED)
 
 class BubbleWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
@@ -186,6 +192,9 @@ class BubbleWindow(Toplevel, BaseWindow):
 
         DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.RunBubbleSort('-'))
         DesSortButton.place(x=50, y=80)
+
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+        self.outputLabel.place(x=50, y=120)
 
     def RunBubbleSort(self, equality):
         list_input = self.Selection.get()
@@ -205,7 +214,8 @@ class BubbleWindow(Toplevel, BaseWindow):
                         #Ascending
             return my_list
                     
-        print(bubblesort(my_list))
+        bubblesort(my_list)
+        self.outputLabel.config(text=f"Sorted List: {my_list}")
 
 class SelectionWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
@@ -223,6 +233,8 @@ class SelectionWindow(Toplevel, BaseWindow):
         DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Selection_Sort('-'))
         DesSortButton.place(x=50, y=80)
 
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+        self.outputLabel.place(x=50, y=120)
 
     def Run_Selection_Sort(self, equality):
 
@@ -245,7 +257,8 @@ class SelectionWindow(Toplevel, BaseWindow):
                 my_list[iter], my_list[min] = my_list[min], my_list[iter]
             return my_list
 
-        print(selection_sort(my_list)) # (W3Schools, n.d)
+        selection_sort(my_list)
+        self.outputLabel.config(text=f"Sorted List: {my_list}") # (W3Schools, n.d)
 
 class FibonacciWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
@@ -256,8 +269,11 @@ class FibonacciWindow(Toplevel, BaseWindow):
         self.LabelFib = Label(self, text="Enter a positive integer:", fg='white', bg='#1F1F1F')
         self.LabelFib.place(x=50, y=30)
 
-        FibonacciButton = Button(self, text="Generate the Nth term", command=self.run_fib_memo)
-        FibonacciButton.place(x=50, y=150)
+        FibonacciButton = Button(self, text="Generate the Nth term", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_fib_memo)
+        FibonacciButton.place(x=50, y=90)
+
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+        self.outputLabel.place(x=50, y=120)
 
     def run_fib_memo(self):
         def fib_memo(n, mem={}):
@@ -269,7 +285,7 @@ class FibonacciWindow(Toplevel, BaseWindow):
                 mem[n] = fib_memo(n-1, mem) + fib_memo(n-2, mem)
             return mem[n]
 
-        print(fib_memo(int(self.Fibonacci.get())))
+        self.outputLabel.config(text=f"The nth term is {str(fib_memo(int(self.Fibonacci.get())))}")
 
 class MergeSortWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
@@ -286,6 +302,9 @@ class MergeSortWindow(Toplevel, BaseWindow):
 
         DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Merge_Sort('-'))
         DesSortButton.place(x=50, y=80)
+
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+        self.outputLabel.place(x=50, y=120)
 
     def Run_Merge_Sort(self, equality):
         list_input = self.Selection.get()
@@ -341,7 +360,8 @@ class MergeSortWindow(Toplevel, BaseWindow):
 
             return my_list
 
-        print(Merge_Sort(my_list))        
+        self.outputLabel.config(text=f"Sorted List: {Merge_Sort(my_list)}")   
+
 
 class RandomisedWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
@@ -351,7 +371,7 @@ class RandomisedWindow(Toplevel, BaseWindow):
         ShuffleDeck = Button(self, text="Shuffle Deck", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.Shuffle_Deck)
         ShuffleDeck.place(x=50, y=80)
         
-        self.TextRa = Text(self, fg='black', bg='white')
+        self.TextRa = Text(self, fg='black', bg='white', borderwidth=0, highlightthickness=0)
         self.TextRa.place(x=50, y=120, width= 300, height = 400)
 
 
@@ -384,13 +404,13 @@ class RecursionWindow(Toplevel, BaseWindow):
 
         self.RecursionText = Entry(self, width = 35)
         self.RecursionText.place(x=50, y=50)
-        self.RecursionLabel = Label(self, text="Enter an integer:", fg='white', bg='#1F1F1F')
+        self.RecursionLabel = Label(self, text="Enter a positive integer:", fg='white', bg='#1F1F1F')
         self.RecursionLabel.place(x=50, y=30)
         self.LabelResult = Label(self, text="", fg='white', bg='#1F1F1F')
-        self.LabelResult.place(x=50, y=180)
+        self.LabelResult.place(x=50, y=115)
         
-        FactorialButton = Button(self, text="Generate Factorial", command=self.run_factorial)
-        FactorialButton.place(x=50, y=150)
+        FactorialButton = Button(self, text="Generate Factorial",fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_factorial)
+        FactorialButton.place(x=50, y=90)
 
     def run_factorial(self):
         number = int(self.RecursionText.get())
@@ -413,15 +433,16 @@ class SearchWindow(Toplevel, BaseWindow):
         self.SearchLabel.place(x=50, y=30)
 
         SearchButton = Button(self, text="Press for Statistics", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_search)
-        SearchButton.place(x=150, y=80)
+        SearchButton.place(x=50, y=80)
 
     def run_search(self):
         list_input = self.Search.get()
         my_list = list(map(int, list_input.split()))
 
-        TextBox = Text(self, fg='black', bg='white', width=40, height=10)
+        TextBox = Text(self, fg='white', bg='#1F1F1F', width=40, height=10, borderwidth=0, highlightthickness=0)
         TextBox.place(x=50, y=120)
         TextBox.delete("1.0", "end")
+        TextBox.configure(state=DISABLED)
 
         def selection_sort(my_list):
             for iter in range(0, len(my_list)-1):
@@ -461,6 +482,7 @@ class SearchWindow(Toplevel, BaseWindow):
                 elif count == max_count and item not in modes:
                     modes.append(item) #(GeeksforGeeks, 2018)
 
+            TextBox.configure(state=NORMAL)
             TextBox.insert("1.0", f"Smallest Number: {smallest}\n")
             TextBox.insert("2.0", f"Largest Number: {largest}\n")
             TextBox.insert("3.0", f"Median: {median}\n")
@@ -485,10 +507,10 @@ class PalindromeWindow(Toplevel, BaseWindow):
         self.PalindromeLabel.place(x=50, y=30)
 
         PalindromeButton = Button(self, text="Press for Palindrome Count", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_palindrome)
-        PalindromeButton.place(x=150, y=80)
+        PalindromeButton.place(x=50, y=80)
 
         self.LabelResult = Label(self, text="", fg='white', bg='#1F1F1F')
-        self.LabelResult.place(x=50, y=150)
+        self.LabelResult.place(x=50, y=105)
 
     def run_palindrome(self):
         InputString = self.Palindrome.get()
@@ -709,7 +731,7 @@ class CreationalWindow(Toplevel, BaseWindow):
         StorageInput = self.EntryStorage.get()
         MemoryInput = self.EntryMemory.get()
 
-        TextBox = Text(self, fg='black', bg='white', width=40, height=15)
+        TextBox = Text(self, fg='black', bg='white', width=40, height=15, borderwidth=0, highlightthickness=0)
         TextBox.place(x=200, y=50)
         TextBox.delete("1.0", "end")
 
@@ -779,8 +801,13 @@ class CreationalWindow(Toplevel, BaseWindow):
                     .setStorage(StorageInput) \
                     .setMemory(MemoryInput) \
                     .build() #(NeetCode, 2023)
-        TextBox.insert("1.0", f"\nComputer Specifications:\n{computer.CPU}\n{computer.GPU}\n{computer.Motherboard}\n{computer.PSU}\n{computer.Storage}\n{computer.Memory}\n")
+        TextBox.insert("1.0", f"\nComputer Specifications:\n\n{computer.CPU}\n{computer.GPU}\n{computer.Motherboard}\n{computer.PSU}\n{computer.Storage}\n{computer.Memory}\n")
         TextBox.configure(state=DISABLED)
 
 app = MainWindow()
 app.mainloop()
+
+
+
+# References:
+
