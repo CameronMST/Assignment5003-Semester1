@@ -167,6 +167,25 @@ class FibonacciWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
         self.WindowParameters(self)
+        self.Fibonacci = Entry(self, width = 21)
+        self.Fibonacci.place(x=50, y=50)
+        self.LabelFib = Label(self, text="Enter a positive integer:", fg='white', bg='#1F1F1F')
+        self.LabelFib.place(x=50, y=30)
+
+        FibonacciButton = Button(self, text="Generate the Nth term", command=self.run_fib_memo)
+        FibonacciButton.place(x=50, y=150)
+
+    def run_fib_memo(self):
+        def fib_memo(n, mem={}):
+            if n in mem:
+                return mem[n]
+            if n <=1:
+                mem[n] = n
+            else:
+                mem[n] = fib_memo(n-1, mem) + fib_memo(n-2, mem)
+            return mem[n]
+
+        print(fib_memo(int(self.Fibonacci.get())))
 
 class MergeSortWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
