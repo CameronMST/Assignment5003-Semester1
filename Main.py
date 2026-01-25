@@ -84,23 +84,23 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
         RSAButton.place(x=50, y=150)
 
     def RSAAlgorithm(self):
-        def power(base, expo, m):
-            res = 1
+        def power(base, exponent, m):
+            result = 1
             base = base % m
-            while expo > 0:
-                if expo & 1:
-                    res = (res * base) % m
+            while exponent > 0:
+                if exponent & 1:
+                    result = (result * base) % m
                 base = (base * base) % m
-                expo = expo // 2
-            return res
+                exponent = exponent // 2
+            return result
 
-        def isPrime(n): #Time complexity = O(n) and Space is O(1) - Very inefficient at large primes.
-            if n <= 1: #Primes need two distinct integers.
+        def isPrime(n):
+            if n <= 1: 
                 return False
-            for i in range(2, n): #This will check between 2 until n, in the case of 2 it actually works because it will be an empty range, and it will return outside of the loop
-                if n % i == 0: #Prime numbers cannot result in an remainder of 0
-                    return False; #Will return false & halt function
-            return n; #Only will run if the division does not result in a remainder of 0, meaning its prime.
+            for i in range(2, n): 
+                if n % i == 0: 
+                    return False; 
+            return n; 
 
         def modInverse(e, phi):
             for d in range(2, phi):
@@ -118,10 +118,10 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
             d = modInverse(e, phi)
             return (e, n), (d, n)
 
-        def gcd(a, b):
-            while b !=0:
-                a, b = b, a % b
-            return a
+        def gcd(inta, intb):
+            while intb !=0:
+                inta, intb = intb, inta % intb
+            return inta
             
         def encrypt(pk, plaintext):
             key, n = pk
@@ -132,12 +132,16 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
             key, n = pk
             plain = [chr(power(char, key, n)) for char in ciphertext]
             return ''.join(plain)
-
+        
         Input1 = int(self.EntryP.get())
         Input2 = int(self.EntryQ.get())
-
+    
         if not isPrime(Input1) or not isPrime(Input2):
             raise ValueError("Both inputs must be prime numbers!")
+    
+        if Input1 < 17 or Input2 < 17:
+            print("Primes smaller than 17, cannot encrypt all characters correctly.")
+            return
 
         public, private = generateKeys(Input1, Input2)
 
@@ -148,7 +152,6 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
         print(f"Original Message: {Message}")
         print(f"Encrypted Message: {Encrypted_Message}")
         print(f"Decrypted Message: {Decrypted_Message}")
-
 
 class BubbleWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
