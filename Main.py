@@ -80,7 +80,7 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
         self.EntryP.place(x=50, y=50)
         self.EntryQ.place(x=50, y=100)
     
-        RSAButton = Button(self, text="Generate Keys & Encrypt/Decrypt", command=self.RSAAlgorithm)
+        RSAButton = Button(self, text="Generate Keys & Encrypt/Decrypt", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.RSAAlgorithm)
         RSAButton.place(x=50, y=150)
 
     def RSAAlgorithm(self):
@@ -162,6 +162,41 @@ class SelectionWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
         self.WindowParameters(self)
+
+        self.Selection = Entry(self, width = 35)
+        self.Selection.place(x=50, y=50)
+        self.LabelSe = Label(self, text="Enter numbers seperated by whitespace:", fg='white', bg='#1F1F1F')
+        self.LabelSe.place(x=50, y=30)
+
+        AscSortButton = Button(self, text="Sort Ascending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Selection_Sort('+'))
+        AscSortButton.place(x=150, y=80)
+
+        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Selection_Sort('-'))
+        DesSortButton.place(x=50, y=80)
+
+
+    def Run_Selection_Sort(self, equality):
+
+        list_input = self.Selection.get()
+        my_list = list(map(int, list_input.split()))
+
+        def selection_sort(my_list):
+            for iter in range(0, len(my_list)-1):
+                min = iter
+                for i in range(iter + 1, len(my_list)):
+                    
+                    if equality == '-':
+                        if my_list[i] > my_list[min]:
+                            min = i
+                    #Descending - Placed at top for default Ascending, if anyother option is entered.
+                    else:
+                        if my_list[i] < my_list[min]:
+                            min = i
+                    #Descending
+                my_list[iter], my_list[min] = my_list[min], my_list[iter]
+            return my_list
+
+        print(selection_sort(my_list)) # (W3Schools, n.d)
 
 class FibonacciWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
