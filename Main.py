@@ -69,7 +69,7 @@ class MainWindow(Tk, BaseWindow):
                 PalindromeWindow(self)
 
     #Algorithm Window Initalisation
-class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DISTINCT PRIMES.
+class RSAWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
         self.WindowParameters(self)
@@ -79,9 +79,9 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
         self.LabelP = Label(self, text="Enter prime number p:", fg='white', bg='#1F1F1F')
         self.LabelQ = Label(self, text="Enter prime number q:", fg='white', bg='#1F1F1F')
         self.EnteredString = Label(self, text="Enter a string to Encrypt / Decrypt:", fg='white', bg='#1F1F1F')
-        
+        self.ErrorLabel = Label(self, text="", fg='red', bg='#1F1F1F')
         self.LabelEncryptDecrypt = Text(self, fg='black', bg='white', width=40, height=5)
-        self.LabelEncryptDecrypt.place(x=50, y=230)
+        self.LabelEncryptDecrypt.configure(state=DISABLED)
 
         self.LabelP.place(x=50, y=30)
         self.LabelQ.place(x=50, y=80)
@@ -89,16 +89,20 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
         self.EntryQ.place(x=50, y=100)
         self.EntryString.place(x=50, y=150)
         self.EnteredString.place(x=50, y=130)
+        self.LabelEncryptDecrypt.place(x=50, y=230)
+        self.ErrorLabel.place(x=50, y=170)
+
 
         Encrypt = Button(self, text="Encrypt", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda:self.RSAAlgorithm(True))
-        Encrypt.place(x=50, y=200)
-
         Decrypt = Button(self, text="Decrypt", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda:self.RSAAlgorithm(False))
         Decrypt.place(x=150, y=200)
-        self.LabelEncryptDecrypt.configure(state=DISABLED)
+        Encrypt.place(x=50, y=200)
+
 
 
     def RSAAlgorithm(self, EncryptDecrypt):
+        self.ErrorLabel.configure(text="")
+
         def power(base, exponent, m):
             result = 1
             base = base % m
@@ -145,18 +149,31 @@ class RSAWindow(Toplevel, BaseWindow): #FIX THIS TO ENSURE BOTH NUMBERS ARE DIST
 
         def decrypt(pk, ciphertext):
             key, n = pk
-            ciphertext = list(map(int, ciphertext.split()))
-            plain = [chr(power(char, key, n)) for char in ciphertext]
-            return ''.join(plain)
+            try:
+                ciphertext = list(map(int, ciphertext.split()))
+                plain = [chr(power(char, key, n)) for char in ciphertext]
+                return ''.join(plain)
+            except ValueError:
+                self.ErrorLabel.config(text="Ciphertext is not valid!")
+                return
         
-        Input1 = int(self.EntryP.get())
-        Input2 = int(self.EntryQ.get())
+        try:
+            Input1 = int(self.EntryP.get())
+            Input2 = int(self.EntryQ.get())
+        except ValueError:
+            self.ErrorLabel.config(text="Please enter only integers!")
+            return
     
+        if Input1 == Input2:
+            self.ErrorLabel.config(text="p and q cannot be the same!")
+            return
+
         if not isPrime(Input1) or not isPrime(Input2):
-            raise ValueError("Both inputs must be prime numbers!")
+            self.ErrorLabel.config(text="One or both numbers are not prime!")
+            return
     
         if Input1 < 17 or Input2 < 17:
-            print("Primes smaller than 17, cannot encrypt all characters correctly.")
+            self.ErrorLabel.config(text="Please enter primes greater than 16!")
             return
 
         public, private = generateKeys(Input1, Input2)
@@ -183,22 +200,30 @@ class BubbleWindow(Toplevel, BaseWindow):
         self.WindowParameters(self)
 
         self.Selection = Entry(self, width = 35)
-        self.Selection.place(x=50, y=50)
+
         self.LabelSe = Label(self, text="Enter numbers seperated by whitespace:", fg='white', bg='#1F1F1F')
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+
         self.LabelSe.place(x=50, y=30)
+        self.Selection.place(x=50, y=50)
+        self.outputLabel.place(x=50, y=120)
 
         AscSortButton = Button(self, text="Sort Ascending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.RunBubbleSort('+'))
+        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.RunBubbleSort('-'))
+        
+        DesSortButton.place(x=50, y=80)
         AscSortButton.place(x=150, y=80)
 
-        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.RunBubbleSort('-'))
-        DesSortButton.place(x=50, y=80)
-
-        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
-        self.outputLabel.place(x=50, y=120)
 
     def RunBubbleSort(self, equality):
         list_input = self.Selection.get()
-        my_list = list(map(int, list_input.split()))
+        
+        try:
+            my_list = list(map(int, list_input.split()))
+        except ValueError:
+            self.outputLabel.config(text="Please enter only integers!")
+            return
+            
 
         def bubblesort(my_list):
             for iter in range(len(my_list)-1):
@@ -223,23 +248,29 @@ class SelectionWindow(Toplevel, BaseWindow):
         self.WindowParameters(self)
 
         self.Selection = Entry(self, width = 35)
-        self.Selection.place(x=50, y=50)
         self.LabelSe = Label(self, text="Enter numbers seperated by whitespace:", fg='white', bg='#1F1F1F')
-        self.LabelSe.place(x=50, y=30)
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+
+        self.LabelSe.place(x=50, y=30)        
+        self.outputLabel.place(x=50, y=120)
+        self.Selection.place(x=50, y=50)
 
         AscSortButton = Button(self, text="Sort Ascending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Selection_Sort('+'))
+        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Selection_Sort('-'))
+       
+        DesSortButton.place(x=50, y=80)
         AscSortButton.place(x=150, y=80)
 
-        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Selection_Sort('-'))
-        DesSortButton.place(x=50, y=80)
 
-        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
-        self.outputLabel.place(x=50, y=120)
 
     def Run_Selection_Sort(self, equality):
 
         list_input = self.Selection.get()
-        my_list = list(map(int, list_input.split()))
+        try:
+            my_list = list(map(int, list_input.split()))
+        except ValueError:
+            self.outputLabel.config(text="Please enter only integers!")
+            return
 
         def selection_sort(my_list):
             for iter in range(0, len(my_list)-1):
@@ -264,18 +295,31 @@ class FibonacciWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
         super().__init__(master)
         self.WindowParameters(self)
+        
         self.Fibonacci = Entry(self, width = 21)
-        self.Fibonacci.place(x=50, y=50)
         self.LabelFib = Label(self, text="Enter a positive integer:", fg='white', bg='#1F1F1F')
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+
+
+        self.outputLabel.place(x=50, y=120)
+        self.Fibonacci.place(x=50, y=50)
         self.LabelFib.place(x=50, y=30)
 
         FibonacciButton = Button(self, text="Generate the Nth term", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_fib_memo)
         FibonacciButton.place(x=50, y=90)
 
-        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
-        self.outputLabel.place(x=50, y=120)
+
 
     def run_fib_memo(self):
+        try:
+            number = int(self.Fibonacci.get())
+            if number < 0:
+                self.outputLabel.config(text="Please enter only positive integers!")
+                return
+        except ValueError:
+            self.outputLabel.config(text="Please enter only positive integers!")
+            return
+
         def fib_memo(n, mem={}):
             if n in mem:
                 return mem[n]
@@ -285,7 +329,7 @@ class FibonacciWindow(Toplevel, BaseWindow):
                 mem[n] = fib_memo(n-1, mem) + fib_memo(n-2, mem)
             return mem[n]
 
-        self.outputLabel.config(text=f"The nth term is {str(fib_memo(int(self.Fibonacci.get())))}")
+        self.outputLabel.config(text=f"The nth term is {str(fib_memo(number))}")
 
 class MergeSortWindow(Toplevel, BaseWindow):
     def __init__(self, master=None):
@@ -293,22 +337,28 @@ class MergeSortWindow(Toplevel, BaseWindow):
         self.WindowParameters(self)
 
         self.Selection = Entry(self, width = 35)
-        self.Selection.place(x=50, y=50)
         self.LabelSe = Label(self, text="Enter numbers seperated by whitespace:", fg='white', bg='#1F1F1F')
+        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
+
         self.LabelSe.place(x=50, y=30)
+        self.Selection.place(x=50, y=50)        
+        self.outputLabel.place(x=50, y=120)
 
         AscSortButton = Button(self, text="Sort Ascending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Merge_Sort('+'))
+        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Merge_Sort('-'))
+        
+        DesSortButton.place(x=50, y=80)
         AscSortButton.place(x=150, y=80)
 
-        DesSortButton = Button(self, text="Sort Descending", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=lambda: self.Run_Merge_Sort('-'))
-        DesSortButton.place(x=50, y=80)
 
-        self.outputLabel = Label(self, text="", fg='white', bg='#1F1F1F')
-        self.outputLabel.place(x=50, y=120)
 
     def Run_Merge_Sort(self, equality):
         list_input = self.Selection.get()
-        my_list = list(map(int, list_input.split()))
+        try:
+            my_list = list(map(int, list_input.split()))
+        except ValueError:
+            self.outputLabel.config(text="Please enter only integers!")
+            return
 
         def Merge_Sort(my_list):
             if len(my_list) > 1:
@@ -373,10 +423,13 @@ class RandomisedWindow(Toplevel, BaseWindow):
         
         self.TextRa = Text(self, fg='black', bg='white', borderwidth=0, highlightthickness=0)
         self.TextRa.place(x=50, y=120, width= 300, height = 400)
+        self.TextRa.config(state=DISABLED)
+
 
 
     def Shuffle_Deck(self):
         import random #Importing Random, because you cannot "Randomise" without it, it would be shuffled but not randomised otherwise
+        self.TextRa.config(state=NORMAL)
         Type = ['Heart', 'Diamond', 'Club', 'Spade']
         Ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
 
@@ -390,7 +443,6 @@ class RandomisedWindow(Toplevel, BaseWindow):
             j = random.randint(0, len(deck) - 1)
             deck[i], deck[j] = deck[j], deck[i]
 
-        self.TextRa.config(state=NORMAL)
         self.TextRa.delete(1.0, END)
         self.TextRa.insert(END, f"The shuffled deck is Deck is:\n\n")
         for Type, Rank in deck:
@@ -413,7 +465,16 @@ class RecursionWindow(Toplevel, BaseWindow):
         FactorialButton.place(x=50, y=90)
 
     def run_factorial(self):
-        number = int(self.RecursionText.get())
+        try:
+            number = int(self.RecursionText.get())
+        except ValueError:
+            self.LabelResult.config(text="Please enter only positive integers!")
+            return
+        
+        if number < 0:
+            self.LabelResult.config(text="Please enter only positive integers!")
+            return
+
         def factorial(number):
             return 1 if number <= 1 else number * factorial(number-1)
         self.LabelResult.config(text=f"The factorial of {number} is {factorial(number)}")
@@ -427,17 +488,28 @@ class SearchWindow(Toplevel, BaseWindow):
         super().__init__(master)
         self.WindowParameters(self)
 
+        self.outputLabel = Label(self, text="", fg='red', bg='#1F1F1F')
         self.Search = Entry(self, width = 35)
-        self.Search.place(x=50, y=50)
         self.SearchLabel = Label(self, text="Enter numbers seperated by whitespace:", fg='white', bg='#1F1F1F')
+       
         self.SearchLabel.place(x=50, y=30)
+        self.Search.place(x=50, y=50)
+        self.outputLabel.place(x=50, y=15)
+
 
         SearchButton = Button(self, text="Press for Statistics", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_search)
         SearchButton.place(x=50, y=80)
 
     def run_search(self):
+
+        self.outputLabel.config(text="")
+
         list_input = self.Search.get()
-        my_list = list(map(int, list_input.split()))
+        try:
+            my_list = list(map(int, list_input.split()))
+        except ValueError:
+            self.outputLabel.config(text="Please enter only integers!")
+            return
 
         TextBox = Text(self, fg='white', bg='#1F1F1F', width=40, height=10, borderwidth=0, highlightthickness=0)
         TextBox.place(x=50, y=120)
@@ -502,15 +574,15 @@ class PalindromeWindow(Toplevel, BaseWindow):
         self.WindowParameters(self)
 
         self.Palindrome = Entry(self, width = 35)
-        self.Palindrome.place(x=50, y=50)
+        self.LabelResult = Label(self, text="", fg='white', bg='#1F1F1F')
         self.PalindromeLabel = Label(self, text="Enter a string:", fg='white', bg='#1F1F1F')
+
+        self.Palindrome.place(x=50, y=50)
         self.PalindromeLabel.place(x=50, y=30)
+        self.LabelResult.place(x=50, y=105)
 
         PalindromeButton = Button(self, text="Press for Palindrome Count", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_palindrome)
-        PalindromeButton.place(x=50, y=80)
-
-        self.LabelResult = Label(self, text="", fg='white', bg='#1F1F1F')
-        self.LabelResult.place(x=50, y=105)
+        PalindromeButton.place(x=50, y=80)        
 
     def run_palindrome(self):
         InputString = self.Palindrome.get()
@@ -700,12 +772,23 @@ class CreationalWindow(Toplevel, BaseWindow):
         self.LabelStorage = Label(self, text="Enter Storage", fg='white', bg='#1F1F1F')
         self.LabelMemory = Label(self, text="Enter Memory", fg='white', bg='#1F1F1F')
 
+        self.LabelCPU.place(x=50, y=30)
+        self.LabelGPU.place(x=50, y=80)
+        self.LabelMotherboard.place(x=50, y=130)
+        self.LabelPSU.place(x=50, y=180)
+        self.LabelStorage.place(x=50, y=230)
+        self.LabelMemory.place(x=50, y=280)
+
+
+
+
         self.EntryCPU = Entry(self, width = 21)
         self.EntryGPU = Entry(self, width = 21)
         self.EntryMotherboard = Entry(self, width = 21)
         self.EntryPSU = Entry(self, width = 21)
         self.EntryStorage = Entry(self, width = 21)
         self.EntryMemory = Entry(self, width = 21)
+      
         self.EntryCPU.place(x=50, y=50)
         self.EntryGPU.place(x=50, y=100)
         self.EntryMotherboard.place(x=50, y=150)
@@ -713,12 +796,6 @@ class CreationalWindow(Toplevel, BaseWindow):
         self.EntryStorage.place(x=50, y=250)
         self.EntryMemory.place(x=50, y=300)
 
-        self.LabelCPU.place(x=50, y=30)
-        self.LabelGPU.place(x=50, y=80)
-        self.LabelMotherboard.place(x=50, y=130)
-        self.LabelPSU.place(x=50, y=180)
-        self.LabelStorage.place(x=50, y=230)
-        self.LabelMemory.place(x=50, y=280)
 
         BuilderButton = Button(self, text="Build Computer", fg='white', bg='purple', activebackground='purple', activeforeground='white', command=self.run_builder_pattern)
         BuilderButton.place(x=50, y=350)
@@ -807,7 +884,5 @@ class CreationalWindow(Toplevel, BaseWindow):
 app = MainWindow()
 app.mainloop()
 
-
-
-# References:
+#References:
 
