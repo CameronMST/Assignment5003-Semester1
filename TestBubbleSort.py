@@ -1,0 +1,25 @@
+import random
+my_list = [random.randint(1,100) for _ in range(10)]
+
+def bubblesort(my_list, equality='+'):
+    for iter in range(len(my_list)-1):
+            for i in range(len(my_list)-iter-1):
+
+                if equality == '-':
+                    if my_list[i] < my_list[i+1]:
+                        my_list[i], my_list[i+1] = my_list[i+1], my_list[i]
+                #Descending - Placed at top for default Ascending if any other option is entered
+                else:
+                    if my_list[i] > my_list[i+1]:
+                        my_list[i], my_list[i+1] = my_list[i+1], my_list[i]
+                #Ascending
+    return my_list
+                
+print(bubblesort(my_list))
+#(GeeksforGeeks, 2014)
+
+
+
+
+#References ----------------------------------------------
+#GeeksforGeeks (2014). Bubble Sort Python. [online] GeeksforGeeks. Available at: https://www.geeksforgeeks.org/python/python-program-for-bubble-sort/.[Accessed 23/01/2026]

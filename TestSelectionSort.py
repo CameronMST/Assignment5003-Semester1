@@ -1,9 +1,8 @@
-list_input = input("Enter numbers seperated by spaces: ")
-my_list = list(map(int, list_input.split()))
+import random
+my_list = [random.randint(1,100) for _ in range(10)]
 
-equality = input("Enter \'+\' For Ascending or \'-\' For Descending: ")
 
-def selection_sort(my_list):
+def selection_sort(my_list, equality='+'):
     for iter in range(0, len(my_list)-1):
         min = iter
         for i in range(iter + 1, len(my_list)):

@@ -1,9 +1,7 @@
-list_input = input("Enter numbers seperated by spaces: ")
-my_list = list(map(int, list_input.split()))
+import random
+my_list = [random.randint(1,100) for _ in range(10)]
 
-equality = input("Enter \'+\' For Ascending or \'-\' For Descending: ")
-
-def Merge_Sort(my_list):
+def Merge_Sort(my_list, equality='+'):
     if len(my_list) > 1:
         mid = len(my_list) // 2
     
