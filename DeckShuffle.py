@@ -13,9 +13,11 @@ for i in range(len(deck)):
     j = random.randint(0, len(deck) - 1)
     deck[i], deck[j] = deck[j], deck[i]
 
-print(*deck, sep="\n")
-
+for Type, Rank in deck:
+    print(f"{Rank} of {Type}")
 
 #References
 
 #Portfolio Courses (2023). Shuffle A Deck Of Cards | Python Example. [online] YouTube. Available at: https://www.youtube.com/watch?v=9Lh4PAN1HsA [Accessed 24 Jan. 2026].
+
+
