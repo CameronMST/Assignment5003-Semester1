@@ -1,12 +1,7 @@
-import random
-import time
-import tracemalloc
-my_list = [random.randint(1,100) for _ in range(10)]
+my_list = [5, 22, 9, 55, 22]
+equality = '-'
 
-
-def selection_sort(my_list, equality='+'):
-    time.start_time = time.time()
-    tracemalloc.start()
+def selection_sort(my_list):
     for iter in range(0, len(my_list)-1):
         min = iter
         for i in range(iter + 1, len(my_list)):
@@ -22,10 +17,11 @@ def selection_sort(my_list, equality='+'):
         my_list[iter], my_list[min] = my_list[min], my_list[iter]
     return my_list
 
-print(selection_sort(my_list)) # (W3Schools, n.d)
-current, peak = tracemalloc.get_traced_memory()
-print(f"\n--- Execution Time: {(time.time() - time.start_time) * 1000:.3f} miliseconds ---")
-print(f"--- Memory Usage: {peak:.2f} bytes ---")
+selection_sort(my_list) # (W3Schools, n.d)
+if equality == '+':
+    assert(selection_sort(my_list)) == [5, 9, 22, 22, 55]
+else:
+    assert(selection_sort(my_list)) == [55, 22, 22, 9, 5]
 
 
 #Reference

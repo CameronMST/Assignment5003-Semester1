@@ -1,11 +1,9 @@
-import random
-import time
-import tracemalloc
-my_list = [random.randint(1,100) for _ in range(10)]
 
-def Merge_Sort(my_list, equality='+'):
-    time.start_time = time.time()
-    tracemalloc.start()
+my_list = [5, 22, 9, 55, 22]
+equality = '-'
+
+def Merge_Sort(my_list):
+
     
     if len(my_list) > 1:
         mid = len(my_list) // 2
@@ -55,11 +53,12 @@ def Merge_Sort(my_list, equality='+'):
             main_index += 1 #(Tutorialspoint, 2019)
 
     return my_list
+Merge_Sort(my_list)
 
-print(Merge_Sort(my_list))
-current, peak = tracemalloc.get_traced_memory()
-print(f"\n--- Execution Time: {(time.time() - time.start_time) * 1000:.3f} miliseconds ---")
-print(f"--- Memory Usage: {peak:.2f} bytes ---")
+if equality == '+':
+    assert(Merge_Sort(my_list)) == [5, 9, 22, 22, 55]
+else:
+    assert(Merge_Sort(my_list)) == [55, 22, 22, 9, 5]
 
 #References
 

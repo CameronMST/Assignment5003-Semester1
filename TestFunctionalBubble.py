@@ -1,11 +1,9 @@
-import random
-import time
-import tracemalloc
-my_list = [random.randint(1,100) for _ in range(10)]
 
-def bubblesort(my_list, equality='+'):
-    time.start_time = time.time()
-    tracemalloc.start()
+my_list = [5, 22, 9, 55, 22]
+equality = '-'
+
+def bubblesort(my_list):
+
     for iter in range(len(my_list)-1):
             for i in range(len(my_list)-iter-1):
 
@@ -18,12 +16,13 @@ def bubblesort(my_list, equality='+'):
                         my_list[i], my_list[i+1] = my_list[i+1], my_list[i]
                 #Ascending
     return my_list
-                
-print(bubblesort(my_list))
-    
-current, peak = tracemalloc.get_traced_memory()
-print(f"\n--- Execution Time: {(time.time() - time.start_time) * 1000:.3f} miliseconds ---")
-print(f"--- Memory Usage: {peak:.2f} bytes ---")
+
+if equality == '+':
+    assert(bubblesort(my_list)) == [5, 9, 22, 22, 55]
+else:
+    assert(bubblesort(my_list)) == [55, 22, 22, 9, 5]
+
+
 
 
 #(GeeksforGeeks, 2014)
