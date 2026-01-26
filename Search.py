@@ -2,6 +2,9 @@
 
 my_list = [1, 2, 2, 3, 4, 4, 5, 6, 6] #Has to be sorted, because median and IQR are statistics of order.
 
+#In the GUI Implementation there is a sorting Algorithm before this function, although we want the complexity of the search not the sort.
+#As we already know the sort comlexity
+
 def Statistical_Search(my_list):
     
     #Smallest & Largest
