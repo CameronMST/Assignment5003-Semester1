@@ -1,5 +1,11 @@
+import tracemalloc
+import time
+
 def countPS(InputString):
     string_length = len(InputString)
+    
+    time.start_time = time.time()
+    tracemalloc.start()
     
     memo = [[-1 for i in range(string_length)] for i in range(string_length)]
 
@@ -31,7 +37,9 @@ def isPalindrome(left_index, right_index, InputString, memo):
 
 
 print("Total palindromic substrings are:", countPS("Hello"))
-
+current, peak = tracemalloc.get_traced_memory()
+print(f"\n--- Execution Time: {(time.time() - time.start_time) * 1000:.3f} miliseconds ---")
+print(f"--- Memory Usage: {peak:.2f} bytes ---")
 
 
 
