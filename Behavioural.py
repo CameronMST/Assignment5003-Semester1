@@ -1,3 +1,6 @@
+from time import time
+
+
 class Song:
     def __init__(self, title):
         self.title = title
@@ -31,9 +34,8 @@ my_playlist = Playlist(song1)
 
 for song_title in my_playlist: #(NeetCode, 2023)
     print(f"Now playing - {song_title}")
-    time = 0
-    while time < 100000000:
-        time +=1 #Simulating Time Delay, Since we're not allowed to import any libraries.
+    time.sleep(1)
+time.sleep(2)
 print("Playlist ended.")
 
 

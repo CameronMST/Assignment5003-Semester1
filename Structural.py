@@ -9,6 +9,9 @@
 #This may not be the best explanation or example, but its the best I could come up with.
 
 #Old System
+import time
+
+
 class SimpleMusicPlayer:
     def __init__(self):
         pass
@@ -40,6 +43,7 @@ class TitleToIdAdapter(SimpleMusicPlayer):
 
     def playSongByTitle(self, songTitle):
         print(f"Adapter: Translating '{songTitle}' to ID...")
+        time.sleep(1)
 
         song_id = self.songLibrary.get(songTitle)
 
@@ -49,11 +53,12 @@ class TitleToIdAdapter(SimpleMusicPlayer):
             print(f"Error: '{songTitle}' not found in library.") #(NeetCode, 2023)
 
 
-simplePlayer = SimpleMusicPlayer()
-simplePlayer.playSongByTitle("Bohemian Rhapsody")
+#simplePlayer = SimpleMusicPlayer()
+#simplePlayer.playSongByTitle("Bohemian Rhapsody")
 
-adapter = TitleToIdAdapter(AdvancedMusicPlayer())
-adapter.playSongByTitle("Stairway to Heaven")
+advanced_player = AdvancedMusicPlayer()
+adapter = TitleToIdAdapter(advanced_player)
+adapter.playSongByTitle("Stairway to Heaven")  #Change song title here for an accurate test, as my GUI implementation cannot have invalid values as it uses a dropdown.
 
 #References
 
