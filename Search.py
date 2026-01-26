@@ -6,6 +6,8 @@ my_list = [1, 2, 2, 3, 4, 4, 5, 6, 6] #Has to be sorted, because median and IQR 
 
 def Statistical_Search(my_list):
     
+
+
     #Smallest & Largest
     smallest = my_list[0]
     largest = my_list[-1]

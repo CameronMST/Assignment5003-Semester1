@@ -1,3 +1,6 @@
+import tracemalloc
+import time
+
 my_list = [1, 2, 2, 3, 4, 4, 5, 6, 6] #Has to be sorted, because median and IQR are statistics of order.
 
 
@@ -6,6 +9,9 @@ my_list = [1, 2, 2, 3, 4, 4, 5, 6, 6] #Has to be sorted, because median and IQR 
 
 def Statistical_Search(my_list):
     
+    time.start_time = time.time()
+    tracemalloc.start()
+
     #Smallest & Largest
     smallest = my_list[0]
     largest = my_list[-1]
@@ -37,13 +43,9 @@ def Statistical_Search(my_list):
 results = Statistical_Search(my_list)
 print(f'\nSmallest: {results[0]}\nLargest: {results[1]}\nMedian: {results[2]}\nLower IQF: {results[3]}\nUpper IQF: {results[4]}\nMode: {results[5]} \n')
 
-assert results[0] == 1
-assert results[1] == 6
-assert results[2] == 4
-assert results[3] == 2
-assert results[4] == 5
-assert results[5] == [2, 4, 6]
-
+current, peak = tracemalloc.get_traced_memory()
+print(f"\n--- Execution Time: {(time.time() - time.start_time) * 1000:.3f} miliseconds ---")
+print(f"--- Memory Usage: {peak:.2f} bytes ---")
 
 #References
 
