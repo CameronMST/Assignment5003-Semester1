@@ -1,5 +1,9 @@
 list_input = input("Enter numbers seperated by spaces: ")
-my_list = list(map(int, list_input.split()))
+try:
+    my_list = list(map(int, list_input.split()))
+except ValueError:
+    print("Please enter only integers!")
+    exit()
 
 equality = input("Enter \'+\' For Ascending or \'-\' For Descending: ")
 
