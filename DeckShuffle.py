@@ -13,6 +13,7 @@ for i in range(len(deck)):
     j = random.randint(0, len(deck) - 1)
     deck[i], deck[j] = deck[j], deck[i]
 
+print("\nYour Deck is: ")
 for Type, Rank in deck:
     print(f"{Rank} of {Type}")
 
