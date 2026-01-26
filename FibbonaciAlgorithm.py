@@ -1,3 +1,11 @@
+try:
+    number = int(input("Enter a positive integer to compute its Fibonacci value: "))
+    if number < 0:
+        raise ValueError
+except ValueError:
+    print("Please enter a valid positive integer!")
+    exit()
+
 def fib_memo(n, mem={}):
     if n in mem:
         return mem[n]
@@ -7,7 +15,7 @@ def fib_memo(n, mem={}):
         mem[n] = fib_memo(n-1, mem) + fib_memo(n-2, mem)
     return mem[n]
 
-print(fib_memo(7))
+print(fib_memo(number))
 #(CodeLucky, 2025)
 
 
