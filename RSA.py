@@ -1,3 +1,6 @@
+Message = input("Enter a message or ciphertext, ciphers must be space-seperated integers: ")
+
+
 def RSAAlgorithm():
     def power(base, exponent, m):
         result = 1
@@ -41,32 +44,55 @@ def RSAAlgorithm():
     def encrypt(pk, plaintext):
         key, n = pk
         cipher = [power(ord(char), key, n) for char in plaintext]
-        return cipher
+        return " ".join(map(str, cipher))
 
     def decrypt(pk, ciphertext):
         key, n = pk
-        plain = [chr(power(char, key, n)) for char in ciphertext]
-        return ''.join(plain)
+        try:
+            ciphertext = list(map(int, ciphertext.split()))
+            plain = [chr(power(char, key, n)) for char in ciphertext]
+            return ''.join(plain)
+        except ValueError:
+            print("Ciphertext is not valid!")
+            return
     
-    Input1 = int(input("Enter a prime number for p: "))
-    Input2 = int(input("Enter a prime number for q: "))
+    try:
+        Input1 = int(input("Enter a prime number for p: "))
+        Input2 = int(input("Enter a prime number for q: "))
+    except ValueError:
+        print("Please enter positive integers only.")
+        return
+    
+    input3 = int(input("Type \"1\" for Encrypt and \"2\" for Decrypt: "))
+    Message = input("Enter a message or ciphertext, ciphers must be space-seperated integers: ")
+    
+    if Input1 == Input2:
+        print("p and q cannot be the same!")
+        return
+
   
     if not isPrime(Input1) or not isPrime(Input2):
-        raise ValueError("Both inputs must be prime numbers!")
+        print("One or both numbers are not prime!")
+        return
   
     if Input1 < 17 or Input2 < 17:
-        print("Primes smaller than 17, cannot encrypt all characters correctly.")
+        print("Enter a primes greater than 16.")
         return
 
     public, private = generateKeys(Input1, Input2)
 
-    Message = 'HI'
-    Encrypted_Message = encrypt(public, Message)
-    Decrypted_Message = decrypt(private, Encrypted_Message)
+    if input3 == 1:
+        Encrypted_Message = encrypt(public, Message)
+        print(f"Original Message: {Message}")
+        print(f"Encrypted Message: {Encrypted_Message}")
 
-    print(f"Original Message: {Message}")
-    print(f"Encrypted Message: {Encrypted_Message}")
-    print(f"Decrypted Message: {Decrypted_Message}")
+    elif input3 == 2:
+        Decrypted_Message = decrypt(private, Message)
+        print(f"Encrypted Message: {Message}")
+        print(f"Decrypted Message: {Decrypted_Message}")
+
+    else:
+        print("Invalid option selected.")
 
 
 RSAAlgorithm()
