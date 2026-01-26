@@ -1,11 +1,9 @@
 import random
 import time
 import tracemalloc
-my_list = [random.randint(1,100) for _ in range(10)]
+my_list = [random.randint(1,100) for _ in range(160)]
 
 def Merge_Sort(my_list, equality='+'):
-    time.start_time = time.time()
-    tracemalloc.start()
     
     if len(my_list) > 1:
         mid = len(my_list) // 2
@@ -56,7 +54,10 @@ def Merge_Sort(my_list, equality='+'):
 
     return my_list
 
-print(Merge_Sort(my_list))
+time.start_time = time.time()
+tracemalloc.start()
+
+Merge_Sort(my_list)
 current, peak = tracemalloc.get_traced_memory()
 print(f"\n--- Execution Time: {(time.time() - time.start_time) * 1000:.3f} miliseconds ---")
 print(f"--- Memory Usage: {peak:.2f} bytes ---")
