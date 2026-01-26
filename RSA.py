@@ -1,6 +1,3 @@
-Message = input("Enter a message or ciphertext, ciphers must be space-seperated integers: ")
-
-
 def RSAAlgorithm():
     def power(base, exponent, m):
         result = 1
